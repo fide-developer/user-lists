@@ -6,6 +6,7 @@ import Footer from "@/app/components/Footer";
 import Header from "@/app/components/Header";
 import NavLink from "@/app/components/NavLink";
 import NavMenu from "@/app/components/NavMenu";
+import Providers from "./providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,19 +34,21 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Header>
-          <Brand />
-          <NavMenu>
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/users">Users</NavLink>
-          </NavMenu>
-        </Header>
+        <Providers>
+          <Header>
+            <Brand />
+            <NavMenu>
+              <NavLink href="/">Home</NavLink>
+              <NavLink href="/users">Users</NavLink>
+            </NavMenu>
+          </Header>
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
-          {children}
-        </main>
+          <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
+            {children}
+          </main>
 
-        <Footer />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );
