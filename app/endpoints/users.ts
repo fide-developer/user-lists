@@ -1,4 +1,4 @@
-import type { ApiUser, UsersResponse } from "@/app/api/users/route";
+import type { ApiUser, UserPost, UsersResponse, UserTodo } from "@/app/api/users/route";
 
 export interface UsersQuery {
   page?: number;
@@ -32,6 +32,18 @@ export async function fetchUsers(query: UsersQuery = {}): Promise<UsersResponse>
 
 export async function fetchUser(id: string | number): Promise<ApiUser> {
   const res = await fetch(buildUserPath(id));
+  if (!res.ok) throw new Error(`Failed to fetch user (${res.status})`);
+  return res.json();
+}
+
+export async function fetchUserPost(id: string | number): Promise<UserPost[]> {
+  const res = await fetch(buildUserPath(`${id}/posts`));
+  if (!res.ok) throw new Error(`Failed to fetch user (${res.status})`);
+  return res.json();
+}
+
+export async function fetchUserTodos(id: string | number): Promise<UserTodo[]> {
+  const res = await fetch(buildUserPath(`${id}/todos`));
   if (!res.ok) throw new Error(`Failed to fetch user (${res.status})`);
   return res.json();
 }

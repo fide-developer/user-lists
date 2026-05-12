@@ -11,6 +11,9 @@ import {
 } from "react-icons/fi";
 import type { ApiUser } from "@/app/api/users/route";
 import { buildUserPath } from "@/app/endpoints/users";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/app/components/Tabs";
+import { UserTodosContent } from "./todos-content";
+import { UserPostContent } from "./posts-content";
 
 const getUser = cache(async (id: string): Promise<ApiUser> => {
   const h = await headers();
@@ -108,6 +111,25 @@ export default async function UserDetailPage({
           </p>
         </Section>
       </div>
+      <Tabs defaultValue="posts" className="w-full">
+        <TabsList>
+          <TabsTrigger value="posts">
+            Posts
+          </TabsTrigger>
+
+          <TabsTrigger value="todos">
+            Todos
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="posts">
+          <UserPostContent userId={id} />
+        </TabsContent>
+
+        <TabsContent value="todos">
+          <UserTodosContent userId={id} />
+        </TabsContent>
+      </Tabs>
     </>
   );
 }
