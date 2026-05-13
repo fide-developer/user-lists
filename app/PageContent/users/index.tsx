@@ -112,7 +112,7 @@ export default function UsersPage() {
                   </Table.Row>
                 ) : (
                   users.map((user) => (
-                    <Table.Row key={user.id} className="cursor-pointer" onClick={() => navigateToUserDetailsPage(user.id)}>
+                    <Table.Row key={user.id}  data-testid={`user-row-${user.id}`} className="cursor-pointer" onClick={() => navigateToUserDetailsPage(user.id)}>
                       <Table.Cell className="font-medium">
                         <div>
                           <div>{user.name}</div>
