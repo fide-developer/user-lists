@@ -1,5 +1,5 @@
-import UsersList from "./users-list";
+import UsersPage from "@/app/PageContent/users";
 
-export default function UsersPage() {
-  return <UsersList />;
+export default function Page() {
+  return <UsersPage />;
 }

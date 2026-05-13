@@ -9,9 +9,9 @@ import UsersSearch from "./users-search";
 import { useRouter } from "next/navigation";
 import { FiGlobe, FiMail } from "react-icons/fi";
 import { UserListFilter } from "./users-filter";
-import Button from "../components/Button";
+import Button from "@/app/components/Button";
 
-export default function UsersList() {
+export default function UsersPage() {
   const router = useRouter()
   const sp = useSearchParams();
   const page = parsePage(sp.get("page") ?? undefined);

@@ -1,5 +1,5 @@
 import Skeleton from "@/app/components/Skeleton";
-import UsersLoader from "./users-loader";
+import UsersLoader from "@/app//PageContent/users/users-loader";
 
 export default function Loading() {
   return (
