@@ -9,6 +9,7 @@ import UsersSearch from "./users-search";
 import { useRouter } from "next/navigation";
 import { FiGlobe, FiMail } from "react-icons/fi";
 import { UserListFilter } from "./users-filter";
+import Button from "../components/Button";
 
 export default function UsersList() {
   const router = useRouter()
@@ -20,7 +21,7 @@ export default function UsersList() {
   const sort = sp.get("sort") ?? "";
   const limit = limitStr ? Number(limitStr) : undefined;
 
-  const { data, isPending, isFetching, isPlaceholderData } = useUsers({
+  const { data, isPending, isFetching, isPlaceholderData, isError, refetch } = useUsers({
     page,
     search: search || undefined,
     limit,
@@ -83,53 +84,79 @@ export default function UsersList() {
                 <Table.Head className="hidden md:table-cell">Username</Table.Head>
                 <Table.Head className="hidden lg:table-cell">Company</Table.Head>
                 <Table.Head className="hidden lg:table-cell">City</Table.Head>
+                <Table.Head className="hidden lg:table-cell">Activity</Table.Head>
               </Table.Row>
             </Table.Header>
-            <Table.Body>
-              {users.length === 0 ? (
+            {isError && (
+              <Table.Body>
                 <Table.Row>
                   <Table.Cell
-                    colSpan={5}
+                    colSpan={7}
                     className="py-10 text-center text-black/60 dark:text-white/60"
                   >
-                    No users found.
+                    Failed to load the data. <Button intent="ghost" onClick={() => refetch()}>Try again</Button>
                   </Table.Cell>
                 </Table.Row>
-              ) : (
-                users.map((user) => (
-                  <Table.Row key={user.id} className="cursor-pointer" onClick={() => navigateToUserDetailsPage(user.id)}>
-                    <Table.Cell className="font-medium">
-                      {user.name}
-                    </Table.Cell>
-                    
-                    {/* combined UI for contacts */}
-                    <Table.Cell className="table-cell md:hidden">
-                      <div>
-                        <span className="flex items-center flex-row flex-nowrap gap-0.5"><FiMail aria-hidden /> {user.email}</span>
-                        <span className="flex items-center flex-row flex-nowrap gap-0.5"><FiGlobe aria-hidden />{user.website}</span>
-                        <div className="flex items-center flex-row flex-wrap gap-2">
-                          <span>Todo: {user.totalCompletedTodos}/{user.totalCompletedTodos + user.totalPendingTodos}</span>
-                          <span>Post: {user.totalPost}</span>
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    {/* display only on big screen */}
-                    <Table.Cell className="hidden md:table-cell">{user.email}</Table.Cell>
-                    <Table.Cell className="hidden md:table-cell"><a href={`https://${user.website}`} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer" className="underline hover:text-blue-400 text-blue-500">{user.website}</a></Table.Cell>
-                    
-                    <Table.Cell className="hidden md:table-cell">
-                      @{user.username}
-                    </Table.Cell>
-                    <Table.Cell className="hidden lg:table-cell">
-                      {user.company.name}
-                    </Table.Cell>
-                    <Table.Cell className="hidden lg:table-cell">
-                      {user.address.city}
+              </Table.Body>
+            )}
+            {!isError && (
+              <Table.Body>
+                {users.length === 0 ? (
+                  <Table.Row>
+                    <Table.Cell
+                      colSpan={7}
+                      className="py-10 text-center text-black/60 dark:text-white/60"
+                    >
+                      No users found.
                     </Table.Cell>
                   </Table.Row>
-                ))
-              )}
-            </Table.Body>
+                ) : (
+                  users.map((user) => (
+                    <Table.Row key={user.id} className="cursor-pointer" onClick={() => navigateToUserDetailsPage(user.id)}>
+                      <Table.Cell className="font-medium">
+                        <div>
+                          <div>{user.name}</div>
+                          <div className="hidden md:flex lg:hidden items-center flex-row flex-wrap gap-2">
+                            <span>Todo: {user.totalCompletedTodos}/{user.totalCompletedTodos + user.totalPendingTodos}</span>
+                            <span>Post: {user.totalPost}</span>
+                          </div>
+                        </div>
+                      </Table.Cell>
+                      
+                      <Table.Cell className="table-cell md:hidden">
+                        <div>
+                          <span className="flex items-center flex-row flex-nowrap gap-0.5"><FiMail aria-hidden /> {user.email}</span>
+                          <span className="flex items-center flex-row flex-nowrap gap-0.5"><FiGlobe aria-hidden />{user.website}</span>
+                          <div className="flex items-center flex-row flex-wrap gap-2">
+                            <span>Todo: {user.totalCompletedTodos}/{user.totalCompletedTodos + user.totalPendingTodos}</span>
+                            <span>Post: {user.totalPost}</span>
+                          </div>
+                        </div>
+                      </Table.Cell>
+                      {/* display only on big screen */}
+                      <Table.Cell className="hidden md:table-cell">{user.email}</Table.Cell>
+                      <Table.Cell className="hidden md:table-cell"><a href={`https://${user.website}`} onClick={(e) => e.stopPropagation()} target="_blank" rel="noreferrer" className="underline hover:text-blue-400 text-blue-500">{user.website}</a></Table.Cell>
+                      
+                      <Table.Cell className="hidden md:table-cell">
+                        @{user.username}
+                      </Table.Cell>
+                      <Table.Cell className="hidden lg:table-cell">
+                        {user.company.name}
+                      </Table.Cell>
+                      <Table.Cell className="hidden lg:table-cell">
+                        {user.address.city}
+                      </Table.Cell>
+                      <Table.Cell className="hidden lg:table-cell">
+                        <div className="flex flex-col gap-2">
+                          <span className="text-nowrap">Todo: {user.totalCompletedTodos}/{user.totalCompletedTodos + user.totalPendingTodos}</span>
+                          <span className="text-nowrap">Post: {user.totalPost}</span>
+                        </div>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))
+                )}
+              </Table.Body>
+            )}
           </Table>
         </div>
       )}
